@@ -7,6 +7,7 @@ import json
 import frappe
 from frappe import _, throw
 from frappe.desk.form.assign_to import clear, close_all_assignments
+from frappe.desk.calendar import get_events as get_calendar_events
 from frappe.model.mapper import get_mapped_doc
 from frappe.utils import add_days, cstr, date_diff, flt, get_link_to_form, getdate, today
 from frappe.utils.nestedset import NestedSet
@@ -417,3 +418,49 @@ def validate_project_dates(project_end_date, task, task_start, task_end, actual_
 		frappe.throw(
 			_("Task's {0} End Date cannot be after Project's End Date.").format(actual_or_expected_date)
 		)
+
+
+
+@frappe.whitelist()
+def get_events(doctype, start, end, field_map, filters=None, fields=None):
+	"""Returns events for Gantt / Calendar view rendering.
+
+	:param start: Start date-time.
+	:param end: End date-time.
+	:param filters: Filters (JSON).
+	"""
+
+	meta = frappe.get_meta(doctype)
+	preview_fields = []
+	for field in [field for field in meta.fields if field.in_preview]:
+		fieldname = field.fieldname
+		if field.fieldtype == "Link":
+			link_meta = frappe.get_meta(field.options)
+			if link_meta.show_title_field_in_link:
+				fieldname = ".".join([fieldname, link_meta.title_field])
+		preview_fields.append(fieldname)
+
+	field_map = frappe._dict(json.loads(field_map))
+	fields = frappe.parse_json(fields)
+
+	if not fields:
+		fields = [field_map.start, field_map.end, "subject", 'name']
+
+	fields += ["_assign", *preview_fields]
+	fields = json.dumps(fields)
+	field_map = json.dumps(field_map)
+	events = [{
+		**event,
+		"user": json.loads(event["_assign"])[0] if event["_assign"] else None
+	} for event in get_calendar_events(doctype, start, end, field_map, filters=filters, fields=fields)]
+
+	users = {event["user"] for event in events if event["user"]}
+	users = frappe.db.get_list("User", filters=[["name", "in", users]], fields=["name", "full_name"])
+	users = {
+		user["name"]: user["full_name"] for user in users
+	}
+
+	return [{
+		**event,
+		"user": users[event["user"]] if event["user"] else None
+	} for event in events]

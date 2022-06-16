@@ -8,7 +8,21 @@ frappe.views.calendar["Task"] = {
 		"id": "name",
 		"title": "subject",
 		"allDay": "allDay",
-		"progress": "progress"
+		"progress": "progress",
+	},
+	prepare_colors: function(d) {
+		if (d.user != null) {
+			const palette = frappe.get_palette(d.user);
+			const style = getComputedStyle(document.documentElement);
+			d.backgroundColor = style.getPropertyValue(palette[0]);
+			d.textColor = style.getPropertyValue(palette[1]);
+		} else {
+			const color_name = "gray"
+			d.backgroundColor = frappe.ui.color.get(color_name, 'extra-light');
+			d.textColor = frappe.ui.color.get(color_name, 'dark');
+		}
+
+		return d
 	},
 	gantt: true,
 	filters: [
@@ -19,5 +33,5 @@ frappe.views.calendar["Task"] = {
 			"label": __("Project")
 		}
 	],
-	get_events_method: "frappe.desk.calendar.get_events"
+	get_events_method: "erpnext.projects.doctype.task.task.get_events"
 }
