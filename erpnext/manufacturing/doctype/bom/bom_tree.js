@@ -30,7 +30,6 @@ frappe.treeview_settings["BOM"] = {
 		var filter = me.opts.filters[0];
 		if(frappe.route_options && frappe.route_options[filter.fieldname]) {
 			var val = frappe.route_options[filter.fieldname];
-			delete frappe.route_options[filter.fieldname];
 			filter.default = "";
 			me.args[filter.fieldname] = val;
 			me.root_label = val;

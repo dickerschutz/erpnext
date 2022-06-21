@@ -227,12 +227,12 @@ erpnext.AccountTreeGrid = class AccountTreeGrid extends frappe.views.TreeGridRep
 	}
 
 	show_general_ledger(account) {
-		frappe.route_options = {
+		const route_options = {
 			account: account,
 			company: this.company,
 			from_date: this.from_date,
 			to_date: this.to_date
 		};
-		frappe.set_route("query-report", "General Ledger");
+		frappe.set_route("query-report", "General Ledger", route_options);
 	}
 };

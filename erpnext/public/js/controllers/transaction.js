@@ -1966,11 +1966,11 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 							if (r.message.length === 1) {
 								frappe.set_route("Form", "Quality Inspection", r.message[0]);
 							} else {
-								frappe.route_options = {
+								const route_options = {
 									"reference_type": me.frm.doc.doctype,
 									"reference_name": me.frm.doc.name
 								};
-								frappe.set_route("List", "Quality Inspection");
+								frappe.set_route("List", "Quality Inspection", route_options);
 							}
 						}
 						dialog.hide();

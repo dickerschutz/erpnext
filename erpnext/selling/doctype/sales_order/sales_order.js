@@ -657,10 +657,10 @@ erpnext.selling.SalesOrderController = class SalesOrderController extends erpnex
 								frappe.set_route("Form", r.message.doctype, r.message.name);
 							}
 							else {
-								frappe.route_options = {
+								const route_options = {
 									"sales_order": me.frm.doc.name
 								}
-								frappe.set_route("List", "Purchase Order");
+								frappe.set_route("List", "Purchase Order", route_options);
 							}
 						}
 					}

@@ -64,11 +64,11 @@ frappe.ui.form.on("Warehouse", {
 			frm.add_custom_button(
 				__("General Ledger", null, "Warehouse"),
 				function () {
-					frappe.route_options = {
+					const route_options = {
 						account: frm.doc.__onload.account,
 						company: frm.doc.company,
 					};
-					frappe.set_route("query-report", "General Ledger");
+					frappe.set_route("query-report", "General Ledger", route_options);
 				}
 			);
 		}

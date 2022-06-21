@@ -127,17 +127,17 @@ erpnext.stock.PurchaseReceiptController = class PurchaseReceiptController extend
 			this.show_general_ledger();
 
 			this.frm.add_custom_button(__('Asset'), function() {
-				frappe.route_options = {
+				const route_options = {
 					purchase_receipt: me.frm.doc.name,
 				};
-				frappe.set_route("List", "Asset");
+				frappe.set_route("List", "Asset", route_options);
 			}, __("View"));
 
 			this.frm.add_custom_button(__('Asset Movement'), function() {
-				frappe.route_options = {
+				const route_options = {
 					reference_name: me.frm.doc.name,
 				};
-				frappe.set_route("List", "Asset Movement");
+				frappe.set_route("List", "Asset Movement", route_options);
 			}, __("View"));
 		}
 

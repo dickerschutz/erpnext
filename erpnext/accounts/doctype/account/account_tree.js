@@ -187,13 +187,13 @@ frappe.treeview_settings["Account"] = {
 			},
 			label: __("View Ledger"),
 			click: function(node, btn) {
-				frappe.route_options = {
+				const route_options = {
 					"account": node.label,
 					"from_date": frappe.sys_defaults.year_start_date,
 					"to_date": frappe.sys_defaults.year_end_date,
 					"company": frappe.treeview_settings['Account'].treeview.page.fields_dict.company.get_value()
 				};
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			},
 			btnClass: "hidden-xs"
 		}

@@ -547,11 +547,11 @@ frappe.ui.form.on("Purchase Invoice", {
 
 		if (frm.doc.docstatus == 1 && frm.doc.per_received > 0) {
 			frm.add_custom_button(__('Purchase Receipt'), () => {
-				frappe.route_options = {
+				const route_options = {
 					'purchase_invoice': frm.doc.name
 				}
 
-				frappe.set_route("List", "Purchase Receipt", "List")
+				frappe.set_route("List", "Purchase Receipt", "List", route_options)
 			}, __('View'));
 		}
 	},

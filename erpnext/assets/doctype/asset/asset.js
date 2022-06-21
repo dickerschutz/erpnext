@@ -126,13 +126,13 @@ frappe.ui.form.on('Asset', {
 
 			if (frm.doc.purchase_receipt || !frm.doc.is_existing_asset) {
 				frm.add_custom_button(__("View General Ledger"), function() {
-					frappe.route_options = {
+					const route_options = {
 						"voucher_no": frm.doc.name,
 						"from_date": frm.doc.available_for_use_date,
 						"to_date": frm.doc.available_for_use_date,
 						"company": frm.doc.company
 					};
-					frappe.set_route("query-report", "General Ledger");
+					frappe.set_route("query-report", "General Ledger", route_options);
 				}, __("Manage"));
 			}
 

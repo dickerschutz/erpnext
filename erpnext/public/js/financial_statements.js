@@ -30,14 +30,14 @@ erpnext.financial_statements = {
 		if (!data.account) return;
 		var project = $.grep(frappe.query_report.filters, function(e){ return e.df.fieldname == 'project'; })
 
-		frappe.route_options = {
+		const route_options = {
 			"account": data.account,
 			"company": frappe.query_report.get_filter_value('company'),
 			"from_date": data.from_date || data.year_start_date,
 			"to_date": data.to_date || data.year_end_date,
 			"project": (project && project.length > 0) ? project[0].$input.val() : ""
 		};
-		frappe.set_route("query-report", "General Ledger");
+		frappe.set_route("query-report", "General Ledger", route_options);
 	},
 	"tree": true,
 	"name_field": "account",

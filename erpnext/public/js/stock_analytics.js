@@ -196,11 +196,11 @@ erpnext.StockAnalytics = class StockAnalytics extends erpnext.StockGridReport {
 		});
 	}
 	show_stock_ledger(item_code) {
-		frappe.route_options = {
+		const route_options = {
 			item_code: item_code,
 			from_date: this.from_date,
 			to_date: this.to_date
 		};
-		frappe.set_route("query-report", "Stock Ledger");
+		frappe.set_route("query-report", "Stock Ledger", route_options);
 	}
 };
