@@ -79,10 +79,10 @@ frappe.query_reports["Batch-Wise Balance History"] = {
 		return value;
 	},
 	"set_batch_route_to_stock_ledger": function (data) {
-		frappe.route_options = {
+		const route_options = {
 			"batch_no": data["Batch"]
 		};
 
-		frappe.set_route("query-report", "Stock Ledger");
+		frappe.set_route("query-report", "Stock Ledger", route_options);
 	}
 }

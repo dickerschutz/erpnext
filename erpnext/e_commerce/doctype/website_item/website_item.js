@@ -19,10 +19,10 @@ frappe.ui.form.on('Website Item', {
 		}, __("View"));
 
 		frm.add_custom_button(__("Stock"), function() {
-			frappe.route_options = {
+			const route_options = {
 				"item_code": frm.doc.item_code
 			};
-			frappe.set_route("query-report", "Stock Balance");
+			frappe.set_route("query-report", "Stock Balance", route_options);
 		}, __("View"));
 
 		frm.add_custom_button(__("E Commerce Settings"), function() {

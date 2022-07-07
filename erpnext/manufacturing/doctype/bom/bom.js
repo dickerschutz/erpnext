@@ -86,10 +86,10 @@ frappe.ui.form.on("BOM", {
 				frm.events.update_cost(frm, true);
 			});
 			frm.add_custom_button(__("Browse BOM"), function() {
-				frappe.route_options = {
+				const route_options = {
 					"bom": frm.doc.name
 				};
-				frappe.set_route("Tree", "BOM");
+				frappe.set_route("Tree", "BOM", route_options);
 			});
 		}
 

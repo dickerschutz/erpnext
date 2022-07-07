@@ -224,12 +224,12 @@ frappe.ui.form.on('Stock Entry', {
 
 			if (frm.doc.per_transferred > 0) {
 				frm.add_custom_button(__('Received Stock Entries'), function() {
-					frappe.route_options = {
+					const route_options = {
 						'outgoing_stock_entry': frm.doc.name,
 						'docstatus': ['!=', 2]
 					};
 
-					frappe.set_route('List', 'Stock Entry');
+					frappe.set_route('List', 'Stock Entry', route_options);
 				}, __("View"));
 			}
 		}

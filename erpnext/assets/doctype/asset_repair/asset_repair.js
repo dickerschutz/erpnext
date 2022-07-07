@@ -33,10 +33,10 @@ frappe.ui.form.on('Asset Repair', {
 	refresh: function(frm) {
 		if (frm.doc.docstatus) {
 			frm.add_custom_button(__("View General Ledger"), function() {
-				frappe.route_options = {
+				const route_options = {
 					"voucher_no": frm.doc.name
 				};
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			});
 		}
 	},

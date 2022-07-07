@@ -77,13 +77,13 @@ frappe.ui.form.on('Account', {
 		} else if (cint(frm.doc.is_group) == 0
 			&& frappe.boot.user.can_read.indexOf("GL Entry") !== -1) {
 			frm.add_custom_button(__('General Ledger'), function () {
-				frappe.route_options = {
+				const route_options = {
 					"account": frm.doc.name,
 					"from_date": frappe.sys_defaults.year_start_date,
 					"to_date": frappe.sys_defaults.year_end_date,
 					"company": frm.doc.company
 				};
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			}, __('View'));
 
 			frm.add_custom_button(__('Convert to Group'), function () {

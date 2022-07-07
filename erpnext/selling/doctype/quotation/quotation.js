@@ -232,6 +232,6 @@ frappe.ui.form.on("Quotation Item", "items_on_form_rendered", "packed_items_on_f
 
 frappe.ui.form.on("Quotation Item", "stock_balance", function(frm, cdt, cdn) {
 	var d = frappe.model.get_doc(cdt, cdn);
-	frappe.route_options = {"item_code": d.item_code};
-	frappe.set_route("query-report", "Stock Balance");
+	const route_options = {"item_code": d.item_code};
+	frappe.set_route("query-report", "Stock Balance", route_options);
 })

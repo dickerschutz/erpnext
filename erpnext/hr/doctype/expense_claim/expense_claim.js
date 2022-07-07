@@ -104,12 +104,12 @@ cur_frm.cscript.refresh = function(doc) {
 
 			if (cint(doc.total_amount_reimbursed) > 0 && frappe.model.can_read(entry_doctype)) {
 				cur_frm.add_custom_button(__('Bank Entries'), function() {
-					frappe.route_options = {
+					const route_options = {
 						party_type: "Employee",
 						party: doc.employee,
 						company: doc.company
 					};
-					frappe.set_route("List", entry_doctype);
+					frappe.set_route("List", entry_doctype, route_options);
 				}, __("View"));
 			}
 			/* eslint-enable */
@@ -242,7 +242,7 @@ frappe.ui.form.on("Expense Claim", {
 
 		if(frm.doc.docstatus > 0 && frm.doc.approval_status !== "Rejected") {
 			frm.add_custom_button(__('Accounting Ledger'), function() {
-				frappe.route_options = {
+				const route_options = {
 					voucher_no: frm.doc.name,
 					company: frm.doc.company,
 					from_date: frm.doc.posting_date,
@@ -250,7 +250,7 @@ frappe.ui.form.on("Expense Claim", {
 					group_by: '',
 					show_cancelled_entries: frm.doc.docstatus === 2
 				};
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			}, __("View"));
 		}
 

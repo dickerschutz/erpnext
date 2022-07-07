@@ -37,12 +37,12 @@ frappe.ui.form.on("Job Applicant", {
 				$('[data-doctype="Employee Onboarding"]').find("button").hide();
 				$('[data-doctype="Job Offer"]').find("button").show();
 				frm.add_custom_button(__("Job Offer"), function() {
-					frappe.route_options = {
+					const route_options = {
 						"job_applicant": frm.doc.name,
 						"applicant_name": frm.doc.applicant_name,
 						"designation": frm.doc.job_opening || frm.doc.designation,
 					};
-					frappe.new_doc("Job Offer");
+					frappe.new_doc("Job Offer", route_options);
 				}, __("Create"));
 			}
 		}

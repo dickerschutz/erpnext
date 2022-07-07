@@ -7,7 +7,7 @@ frappe.ui.form.on(cur_frm.doctype, {
 			&& frm.doc.docstatus > 0) {
 
 			frm.add_custom_button(__("Accounting Ledger"), function() {
-				frappe.route_options = {
+				const route_options = {
 					voucher_no: frm.doc.name,
 					company: frm.doc.company,
 					from_date: moment(frm.doc.posting_date).format('YYYY-MM-DD'),
@@ -15,7 +15,7 @@ frappe.ui.form.on(cur_frm.doctype, {
 					show_cancelled_entries: frm.doc.docstatus === 2
 				};
 
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			},__("View"));
 		}
 	},

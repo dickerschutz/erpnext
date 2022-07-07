@@ -85,19 +85,19 @@ frappe.require("assets/erpnext/js/financial_statements.js", function() {
 		"open_profit_and_loss_statement": function(data) {
 			if (!data.account) return;
 
-			frappe.route_options = {
+			const route_options = {
 				"company": frappe.query_report.get_filter_value('company'),
 				"from_fiscal_year": data.fiscal_year,
 				"to_fiscal_year": data.fiscal_year
 			};
 
 			if(data.based_on == 'cost_center'){
-				frappe.route_options["cost_center"] = data.account
+				route_options["cost_center"] = data.account
 			} else {
-				frappe.route_options["project"] = data.account
+				route_options["project"] = data.account
 			}
 
-			frappe.set_route("query-report", "Profit and Loss Statement");
+			frappe.set_route("query-report", "Profit and Loss Statement", route_options);
 		},
 		"tree": true,
 		"name_field": "account",

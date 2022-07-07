@@ -16,10 +16,10 @@ frappe.ui.form.on('Batch', {
 	refresh: (frm) => {
 		if(!frm.is_new()) {
 			frm.add_custom_button(__("View Ledger"), () => {
-				frappe.route_options = {
+				const route_options = {
 					batch_no: frm.doc.name
 				};
-				frappe.set_route("query-report", "Stock Ledger");
+				frappe.set_route("query-report", "Stock Ledger", route_options);
 			});
 			frm.trigger('make_dashboard');
 		}

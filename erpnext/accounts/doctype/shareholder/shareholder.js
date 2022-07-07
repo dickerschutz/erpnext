@@ -22,16 +22,16 @@ frappe.ui.form.on('Shareholder', {
 
 		if (frm.doc.folio_no != undefined){
 			frm.add_custom_button(__("Share Balance"), function(){
-				frappe.route_options = {
+				const route_options = {
 					"shareholder": frm.doc.name,
 				};
-				frappe.set_route("query-report", "Share Balance");
+				frappe.set_route("query-report", "Share Balance", route_options);
 			});
 			frm.add_custom_button(__("Share Ledger"), function(){
-				frappe.route_options = {
+				const route_options = {
 					"shareholder": frm.doc.name,
 				};
-				frappe.set_route("query-report", "Share Ledger");
+				frappe.set_route("query-report", "Share Ledger", route_options);
 			});
 			let fields = ['title', 'folio_no', 'company'];
 			fields.forEach((fieldname) => {

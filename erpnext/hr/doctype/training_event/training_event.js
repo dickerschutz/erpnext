@@ -8,16 +8,16 @@ frappe.ui.form.on('Training Event', {
 	refresh: function (frm) {
 		if (!frm.doc.__islocal) {
 			frm.add_custom_button(__("Training Result"), function () {
-				frappe.route_options = {
+				const route_options = {
 					training_event: frm.doc.name
 				};
-				frappe.set_route("List", "Training Result");
+				frappe.set_route("List", "Training Result", route_options);
 			});
 			frm.add_custom_button(__("Training Feedback"), function () {
-				frappe.route_options = {
+				const route_options = {
 					training_event: frm.doc.name
 				};
-				frappe.set_route("List", "Training Feedback");
+				frappe.set_route("List", "Training Feedback", route_options);
 			});
 		}
 		frm.events.set_employee_query(frm);

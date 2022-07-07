@@ -25,22 +25,22 @@ frappe.ui.form.on("Item", {
 	refresh: function(frm) {
 		if (frm.doc.is_stock_item) {
 			frm.add_custom_button(__("Stock Balance"), function() {
-				frappe.route_options = {
+				const route_options = {
 					"item_code": frm.doc.name
 				}
-				frappe.set_route("query-report", "Stock Balance");
+				frappe.set_route("query-report", "Stock Balance", route_options);
 			}, __("View"));
 			frm.add_custom_button(__("Stock Ledger"), function() {
-				frappe.route_options = {
+				const route_options = {
 					"item_code": frm.doc.name
 				}
-				frappe.set_route("query-report", "Stock Ledger");
+				frappe.set_route("query-report", "Stock Ledger", route_options);
 			}, __("View"));
 			frm.add_custom_button(__("Stock Projected Qty"), function() {
-				frappe.route_options = {
+				const route_options = {
 					"item_code": frm.doc.name
 				}
-				frappe.set_route("query-report", "Stock Projected Qty");
+				frappe.set_route("query-report", "Stock Projected Qty", route_options);
 			}, __("View"));
 		}
 

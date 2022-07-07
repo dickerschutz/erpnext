@@ -52,14 +52,14 @@ erpnext.stock.StockController = class StockController extends frappe.ui.form.Con
 		var me = this;
 		if(this.frm.doc.docstatus > 0) {
 			cur_frm.add_custom_button(__("Stock Ledger"), function() {
-				frappe.route_options = {
+				const route_options = {
 					voucher_no: me.frm.doc.name,
 					from_date: me.frm.doc.posting_date,
 					to_date: moment(me.frm.doc.modified).format('YYYY-MM-DD'),
 					company: me.frm.doc.company,
 					show_cancelled_entries: me.frm.doc.docstatus === 2
 				};
-				frappe.set_route("query-report", "Stock Ledger");
+				frappe.set_route("query-report", "Stock Ledger", route_options);
 			}, __("View"));
 		}
 
@@ -69,7 +69,7 @@ erpnext.stock.StockController = class StockController extends frappe.ui.form.Con
 		var me = this;
 		if(this.frm.doc.docstatus > 0) {
 			cur_frm.add_custom_button(__('Accounting Ledger'), function() {
-				frappe.route_options = {
+				const route_options = {
 					voucher_no: me.frm.doc.name,
 					from_date: me.frm.doc.posting_date,
 					to_date: moment(me.frm.doc.modified).format('YYYY-MM-DD'),
@@ -77,7 +77,7 @@ erpnext.stock.StockController = class StockController extends frappe.ui.form.Con
 					group_by: "Group by Voucher (Consolidated)",
 					show_cancelled_entries: me.frm.doc.docstatus === 2
 				};
-				frappe.set_route("query-report", "General Ledger");
+				frappe.set_route("query-report", "General Ledger", route_options);
 			}, __("View"));
 		}
 	}

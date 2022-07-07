@@ -3,8 +3,8 @@
 
 frappe.ui.form.on('Process Statement Of Accounts', {
 	view_properties: function(frm) {
-		frappe.route_options = {doc_type: 'Customer'};
-		frappe.set_route("Form", "Customize Form");
+		const route_options = {doc_type: 'Customer'};
+		frappe.set_route("Form", "Customize Form", route_options);
 	},
 	refresh: function(frm){
 		if(!frm.doc.__islocal) {
