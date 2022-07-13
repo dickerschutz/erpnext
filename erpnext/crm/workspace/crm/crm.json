@@ -438,10 +438,10 @@
   },
   {
    "color": "Blue",
-   "format": "{} Assigned",
+   "format": "{} Open",
    "label": "Opportunity",
    "link_to": "Opportunity",
-   "stats_filter": "{\"_assign\": [\"like\", '%' + frappe.session.user + '%']}",
+   "stats_filter": "{\"status\":\"Open\"}",
    "type": "DocType"
   },
   {

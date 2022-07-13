@@ -1114,6 +1114,7 @@ def add_leaves(events, start, end, filter_conditions=None):
 	for d in frappe.db.sql(query, {"start": start, "end": end}, as_dict=True):
 		e = {
 			"name": d.name,
+			"employee": d.employee,
 			"doctype": "Leave Application",
 			"from_date": d.from_date,
 			"to_date": d.to_date,

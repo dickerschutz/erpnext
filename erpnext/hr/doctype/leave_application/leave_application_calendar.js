@@ -11,6 +11,20 @@ frappe.views.calendar["Leave Application"] = {
 		"color": "color",
 		"allDay": "all_day"
 	},
+	prepare_colors: function(d) {
+		if (d.employee != null) {
+			const palette = frappe.get_palette(d.employee);
+			const style = getComputedStyle(document.documentElement);
+			d.backgroundColor = style.getPropertyValue(palette[0]);
+			d.textColor = style.getPropertyValue(palette[1]);
+		} else {
+			const color_name = "gray"
+			d.backgroundColor = frappe.ui.color.get(color_name, 'extra-light');
+			d.textColor = frappe.ui.color.get(color_name, 'dark');
+		}
+
+		return d
+	},
 	options: {
 		header: {
 			left: 'prev,next today',

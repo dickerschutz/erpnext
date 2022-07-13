@@ -449,18 +449,10 @@ def get_events(doctype, start, end, field_map, filters=None, fields=None):
 	fields += ["_assign", *preview_fields]
 	fields = json.dumps(fields)
 	field_map = json.dumps(field_map)
-	events = [{
-		**event,
-		"user": json.loads(event["_assign"])[0] if event["_assign"] else None
-	} for event in get_calendar_events(doctype, start, end, field_map, filters=filters, fields=fields)]
+	events = get_calendar_events(doctype, start, end, field_map, filters=filters, fields=fields)
+	for event in events:
+		assign = json.loads(event["_assign"]) if event["_assign"] else []
+		user = assign[0] if assign else None
+		event["user"] = user
 
-	users = {event["user"] for event in events if event["user"]}
-	users = frappe.db.get_list("User", filters=[["name", "in", users]], fields=["name", "full_name"])
-	users = {
-		user["name"]: user["full_name"] for user in users
-	}
-
-	return [{
-		**event,
-		"user": users[event["user"]] if event["user"] else None
-	} for event in events]
+	return events
