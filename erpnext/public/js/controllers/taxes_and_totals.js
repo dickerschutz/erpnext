@@ -67,6 +67,7 @@ erpnext.taxes_and_totals = class TaxesAndTotals extends erpnext.payments {
 			this.frm.doc.paid_amount = flt(this.frm.doc.grand_total, precision("grand_total"));
 		}
 
+		this.frm.trigger("total");
 		this.frm.refresh_fields();
 	}
 
