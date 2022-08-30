@@ -307,13 +307,13 @@
   {
    "fetch_from": "customer_primary_contact.mobile_no",
    "fieldname": "mobile_no",
-   "fieldtype": "Data",
+   "fieldtype": "Read Only",
    "label": "Mobile No"
   },
   {
    "fetch_from": "customer_primary_contact.email_id",
    "fieldname": "email_id",
-   "fieldtype": "Data",
+   "fieldtype": "Read Only",
    "label": "Email Id"
   },
   {
