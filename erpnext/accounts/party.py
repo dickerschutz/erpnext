@@ -170,6 +170,7 @@ def _get_party_details(
 			party_type, party.name, "tax_withholding_category"
 		)
 
+	party_details["tax_id"] = party.get("tax_id")
 	return party_details
 
 

@@ -117,6 +117,9 @@ erpnext.TransactionController = class TransactionController extends erpnext.taxe
 				}
 
 				erpnext.accounts.dimensions.copy_dimension_from_first_row(frm, cdt, cdn, 'items');
+			},
+			items_remove: function(frm, cdt, cdn) {
+				frm.cscript.calculate_taxes_and_totals();
 			}
 		});
 
