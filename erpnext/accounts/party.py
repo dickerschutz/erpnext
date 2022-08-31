@@ -624,7 +624,11 @@ def set_taxes(
 	if use_for_shopping_cart:
 		args.update({"use_for_shopping_cart": use_for_shopping_cart})
 
-	return get_tax_template(posting_date, args)
+	tax_template = get_tax_template(posting_date, args)
+	if not tax_template:
+		tax_template = frappe.db.get_value("Sales Taxes and Charges Template", {"is_default": 1, "company": company})
+
+	return tax_template
 
 
 @frappe.whitelist()
