@@ -145,7 +145,6 @@ class Customer(TransactionBase):
 					title=_("Missing Values Required"),
 				)
 
-
 	def validate_default_bank_account(self):
 		if self.default_bank_account:
 			is_company_account = frappe.db.get_value(
