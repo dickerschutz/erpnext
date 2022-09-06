@@ -86,6 +86,7 @@ class Customer(TransactionBase):
 		self.check_customer_group_change()
 		self.validate_default_bank_account()
 		self.validate_internal_customer()
+		self.validate_new_primary_address()
 
 		# set loyalty program tier
 		if frappe.db.exists("Customer", self.name):
@@ -129,6 +130,21 @@ class Customer(TransactionBase):
 		if not self.get("__islocal"):
 			if self.customer_group != frappe.db.get_value("Customer", self.name, "customer_group"):
 				frappe.flags.customer_group_changed = True
+
+	def validate_new_primary_address(self):
+		if self.flags.is_new_doc and self.get("address_line1"):
+			reqd_fields = []
+			for field in ["city", "country"]:
+				if not self.get(field):
+					reqd_fields.append("<li>" + field.title() + "</li>")
+
+			if reqd_fields:
+				msg = _("Following fields are mandatory to create address:")
+				frappe.throw(
+					"{0} <br><br> <ul>{1}</ul>".format(msg, "\n".join(reqd_fields)),
+					title=_("Missing Values Required"),
+				)
+
 
 	def validate_default_bank_account(self):
 		if self.default_bank_account:
