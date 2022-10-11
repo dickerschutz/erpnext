@@ -1,4 +1,5 @@
 frappe.listview_settings['Task'] = {
+	hide_name_column: true,
 	add_fields: ["project", "status", "priority", "exp_start_date",
 		"exp_end_date", "subject", "progress", "depends_on_tasks"],
 	filters: [["status", "=", "Open"]],
