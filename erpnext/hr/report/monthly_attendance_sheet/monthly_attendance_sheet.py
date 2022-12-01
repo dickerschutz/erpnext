@@ -99,6 +99,24 @@ def get_columns(filters: Filters) -> List[Dict]:
 		columns.extend(
 			[
 				{
+					"label": _("Scheduled Hours"),
+					"fieldname": "total_scheduled_hours",
+					"fieldtype": "Float",
+					"width": 110,
+				},
+					{
+					"label": _("Working Hours"),
+					"fieldname": "total_working_hours",
+					"fieldtype": "Float",
+					"width": 110,
+				},
+				{
+					"label": _("Reallocated Hours"),
+					"fieldname": "total_reallocated_hours",
+					"fieldtype": "Float",
+					"width": 110,
+				},
+				{
 					"label": _("Total Present"),
 					"fieldname": "total_present",
 					"fieldtype": "Float",
@@ -220,6 +238,7 @@ def get_attendance_map(filters: Filters) -> Dict:
 			Attendance.employee,
 			Extract("day", Attendance.attendance_date).as_("day_of_month"),
 			Attendance.status,
+			Attendance.reallocated_hours,
 			Attendance.shift,
 		)
 		.where(
@@ -238,7 +257,7 @@ def get_attendance_map(filters: Filters) -> Dict:
 
 	for d in attendance_list:
 		attendance_map.setdefault(d.employee, frappe._dict()).setdefault(d.shift, frappe._dict())
-		attendance_map[d.employee][d.shift][d.day_of_month] = d.status
+		attendance_map[d.employee][d.shift][d.day_of_month] = (d.status, d.reallocated_hours)
 
 	return attendance_map
 
@@ -367,6 +386,7 @@ def get_rows(
 				{"employee": employee, "employee_name": details.employee_name}
 			)
 
+			print(attendance_for_employee)
 			records.extend(attendance_for_employee)
 
 	return records
@@ -402,6 +422,9 @@ def get_attendance_status_for_summarized_view(
 			total_unmarked_days += 1
 
 	return {
+		"total_scheduled_hours": summary.total_scheduled_hours,
+		"total_working_hours": summary.total_working_hours,
+		"total_reallocated_hours": summary.total_reallocated_hours,
 		"total_present": summary.total_present + summary.total_half_days,
 		"total_leaves": summary.total_leaves + summary.total_half_days,
 		"total_absent": summary.total_absent + summary.total_half_days,
@@ -429,6 +452,10 @@ def get_attendance_summary_and_days(employee: str, filters: Filters) -> Tuple[Di
 	half_day_case = frappe.qb.terms.Case().when(Attendance.status == "Half Day", 0.5).else_(0)
 	sum_half_day = Sum(half_day_case).as_("total_half_days")
 
+	sum_reallocated_hours = Sum(Attendance.reallocated_hours).as_("total_reallocated_hours")
+	sum_working_hours = Sum(Attendance.working_hours).as_("total_working_hours")
+	sum_scheduled_hours = Sum(Attendance.scheduled_hours).as_("total_scheduled_hours")
+
 	summary = (
 		frappe.qb.from_(Attendance)
 		.select(
@@ -436,6 +463,9 @@ def get_attendance_summary_and_days(employee: str, filters: Filters) -> Tuple[Di
 			sum_absent,
 			sum_leave,
 			sum_half_day,
+			sum_working_hours,
+			sum_scheduled_hours,
+			sum_reallocated_hours,
 		)
 		.where(
 			(Attendance.docstatus == 1)
@@ -474,16 +504,18 @@ def get_attendance_status_for_detailed_view(
 	total_days = get_total_days_in_month(filters)
 	attendance_values = []
 
-	for shift, status_dict in employee_attendance.items():
+	for shift, values in employee_attendance.items():
 		row = {"shift": shift}
 
 		for day in range(1, total_days + 1):
-			status = status_dict.get(day)
+			value = values.get(day)
+			status, reallocated_hours = value if value else (None, None)
+
 			if status is None and holidays:
 				status = get_holiday_status(day, holidays)
 
 			abbr = status_map.get(status, "")
-			row[day] = abbr
+			row[day] = " ".join([abbr, str(reallocated_hours)])
 
 		attendance_values.append(row)
 
@@ -590,7 +622,8 @@ def get_chart_data(attendance_map: Dict, filters: Filters) -> Dict:
 
 		for employee, attendance_dict in attendance_map.items():
 			for shift, attendance in attendance_dict.items():
-				attendance_on_day = attendance.get(day["fieldname"])
+				value = attendance.get(day["fieldname"])
+				attendance_on_day = value[0] if value else None
 
 				if attendance_on_day == "Absent":
 					total_absent_on_day += 1
