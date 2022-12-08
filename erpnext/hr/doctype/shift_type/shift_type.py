@@ -199,4 +199,6 @@ def process_auto_attendance_for_all_shifts():
 	shift_list = frappe.get_all("Shift Type", "name", {"enable_auto_attendance": "1"}, as_list=True)
 	for shift in shift_list:
 		doc = frappe.get_doc("Shift Type", shift[0])
+		doc.last_sync_of_checkin = get_datetime()
+		doc.save()
 		doc.process_auto_attendance()
