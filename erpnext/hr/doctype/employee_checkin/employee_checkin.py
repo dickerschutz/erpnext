@@ -169,6 +169,17 @@ def mark_attendance_and_link_log(
 				(attendance.name, log_names),
 			)
 			return attendance
+		elif duplicate:
+			attendance = frappe.get_doc("Attendance", duplicate[0]["name"])
+			attendance.update({
+				"shift": shift,
+				"working_hours": working_hours,
+				"in_time": in_time,
+				"out_time": out_time,
+			})
+			attendance.flags.ignore_validate_update_after_submit = True
+			attendance.save()
+			return attendance
 		else:
 			skip_attendance_in_checkins(log_names)
 			add_comment_in_checkins(log_names, duplicate, overlapping)
