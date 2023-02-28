@@ -114,7 +114,6 @@ class ShiftType(Document):
 		The Absent is marked starting from 'process_attendance_after' or employee creation date.
 		"""
 		start_date, end_date = self.get_start_and_end_dates(employee)
-
 		# no shift assignment found, no need to process absent attendance records
 		if start_date is None:
 			return
@@ -191,7 +190,7 @@ class ShiftType(Document):
 			filters = {"default_shift": self.name, "status": ["!=", "Inactive"]}
 			default_shift_employees = frappe.get_all("Employee", filters=filters, pluck="name")
 
-			return list(set(assigned_employees + default_shift_employees))
+			assigned_employees =list(set(assigned_employees + default_shift_employees))
 		return assigned_employees
 
 

@@ -315,39 +315,12 @@ def get_prev_or_next_shift(
 	MAX_DAYS = 366
 	shift_details = {}
 
-	if consider_default_shift and default_shift:
-		direction = -1 if next_shift_direction == "reverse" else 1
-		for i in range(MAX_DAYS):
-			date = for_timestamp + timedelta(days=direction * (i + 1))
-			shift_details = get_employee_shift(employee, date, consider_default_shift, None)
-			if shift_details:
-				break
-	else:
-		direction = "<" if next_shift_direction == "reverse" else ">"
-		sort_order = "desc" if next_shift_direction == "reverse" else "asc"
-		dates = frappe.db.get_all(
-			"Shift Assignment",
-			["start_date", "end_date"],
-			{
-				"employee": employee,
-				"start_date": (direction, for_timestamp.date()),
-				"docstatus": 1,
-				"status": "Active",
-			},
-			as_list=True,
-			limit=MAX_DAYS,
-			order_by="start_date " + sort_order,
-		)
-
-		if dates:
-			for date in dates:
-				if date[1] and date[1] < for_timestamp.date():
-					continue
-				shift_details = get_employee_shift(
-					employee, datetime.combine(date[0], for_timestamp.time()), consider_default_shift, None
-				)
-				if shift_details:
-					break
+	direction = -1 if next_shift_direction == "reverse" else 1
+	for i in range(MAX_DAYS):
+		date = for_timestamp + timedelta(days=direction * (i + 1))
+		shift_details = get_employee_shift(employee, date, consider_default_shift, None)
+		if shift_details:
+			break
 
 	return shift_details or {}
 
