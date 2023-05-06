@@ -48,6 +48,9 @@ class ShiftType(Document):
 			logs, key=lambda x: (x["employee"], x["shift_actual_start"])
 		):
 			single_shift_logs = list(group)
+			if len(single_shift_logs) % 2 == 1:
+				continue
+
 			(
 				attendance_status,
 				working_hours,
