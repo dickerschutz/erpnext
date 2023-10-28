@@ -184,6 +184,11 @@ class Lead(SellingController, CRMNote):
 		)
 
 	@frappe.whitelist()
+	def close(self, data):
+		self.db_set("status", "Replied")
+		self.save()
+
+	@frappe.whitelist()
 	def create_prospect_and_contact(self, data):
 		data = frappe._dict(data)
 		if data.create_contact:
