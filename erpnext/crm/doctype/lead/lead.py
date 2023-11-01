@@ -183,9 +183,13 @@ class Lead(SellingController, CRMNote):
 			"Quotation", {"party_name": self.name, "docstatus": 1, "status": "Lost"}
 		)
 
+	def has_permission(self, permtype="read", verbose=False) -> bool:
+		return True
+
 	@frappe.whitelist()
 	def close(self, data):
-		self.db_set("status", "Replied")
+		self.status = "Replied"
+		self.flags.ignore_validate_update_after_submit = True
 		self.save(ignore_permissions=True)
 
 	@frappe.whitelist()
