@@ -111,6 +111,12 @@ def get_columns(filters: Filters) -> List[Dict]:
 					"width": 110,
 				},
 				{
+					"label": _("Corrected Hours"),
+					"fieldname": "total_corrected_hours",
+					"fieldtype": "Float",
+					"width": 110,
+				},
+				{
 					"label": _("Reallocated Hours"),
 					"fieldname": "total_reallocated_hours",
 					"fieldtype": "Float",
@@ -238,6 +244,7 @@ def get_attendance_map(filters: Filters) -> Dict:
 			Attendance.employee,
 			Extract("day", Attendance.attendance_date).as_("day_of_month"),
 			Attendance.status,
+			Attendance.corrected_hours,
 			Attendance.reallocated_hours,
 			Attendance.shift,
 		)
@@ -257,7 +264,7 @@ def get_attendance_map(filters: Filters) -> Dict:
 
 	for d in attendance_list:
 		attendance_map.setdefault(d.employee, frappe._dict()).setdefault(d.shift, frappe._dict())
-		attendance_map[d.employee][d.shift][d.day_of_month] = (d.status, d.reallocated_hours)
+		attendance_map[d.employee][d.shift][d.day_of_month] = (d.status, d.corrected_hours, d.reallocated_hours)
 
 	return attendance_map
 
@@ -424,6 +431,7 @@ def get_attendance_status_for_summarized_view(
 	return {
 		"total_scheduled_hours": summary.total_scheduled_hours,
 		"total_working_hours": summary.total_working_hours,
+		"total_corrected_hours": summary.total_corrected_hours,
 		"total_reallocated_hours": summary.total_reallocated_hours,
 		"total_present": summary.total_present + summary.total_half_days,
 		"total_leaves": summary.total_leaves + summary.total_half_days,
@@ -453,6 +461,7 @@ def get_attendance_summary_and_days(employee: str, filters: Filters) -> Tuple[Di
 	sum_half_day = Sum(half_day_case).as_("total_half_days")
 
 	sum_reallocated_hours = Sum(Attendance.reallocated_hours).as_("total_reallocated_hours")
+	sum_corrected_hours = Sum(Attendance.corrected_hours).as_("total_corrected_hours")
 	sum_working_hours = Sum(Attendance.working_hours).as_("total_working_hours")
 	sum_scheduled_hours = Sum(Attendance.scheduled_hours).as_("total_scheduled_hours")
 
@@ -465,6 +474,7 @@ def get_attendance_summary_and_days(employee: str, filters: Filters) -> Tuple[Di
 			sum_half_day,
 			sum_working_hours,
 			sum_scheduled_hours,
+			sum_corrected_hours,
 			sum_reallocated_hours,
 		)
 		.where(
@@ -509,7 +519,7 @@ def get_attendance_status_for_detailed_view(
 
 		for day in range(1, total_days + 1):
 			value = values.get(day)
-			status, reallocated_hours = value if value else (None, None)
+			status, corrected_hours, reallocated_hours = value if value else (None, None, None)
 
 			if status is None and holidays:
 				status = get_holiday_status(day, holidays)
