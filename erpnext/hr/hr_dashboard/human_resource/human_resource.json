@@ -41,18 +41,22 @@
   {
    "chart": "Department Wise Openings",
    "width": "Half"
+  },
+  {
+   "chart": "Employee Leave Balance",
+   "width": "Half"
   }
  ],
- "creation": "2020-07-22 11:56:33.015888",
+ "creation": "2023-05-02 16:15:48.627943",
  "dashboard_name": "Human Resource",
  "docstatus": 0,
  "doctype": "Dashboard",
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "modified": "2020-07-22 14:42:12.789249",
+ "modified": "2023-11-21 12:45:05.692946",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Human Resource",
- "owner": "Administrator"
+ "owner": "raymond@dickerschutz.com"
 }
