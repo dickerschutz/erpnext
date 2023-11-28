@@ -179,6 +179,7 @@ class Customer(TransactionBase):
 	def on_update(self):
 		self.validate_name_with_customer_group()
 		self.create_primary_contact()
+		self.link_additional_contact()
 		self.create_primary_address()
 
 		if self.flags.old_lead != self.lead_name:
@@ -188,6 +189,8 @@ class Customer(TransactionBase):
 			self.link_lead_address_and_contact()
 
 		self.update_customer_groups()
+
+
 
 	def update_customer_groups(self):
 		ignore_doctypes = ["Lead", "Opportunity", "POS Profile", "Tax Rule", "Pricing Rule"]
@@ -203,6 +206,12 @@ class Customer(TransactionBase):
 				self.db_set("customer_primary_contact", contact.name)
 				self.db_set("mobile_no", self.mobile_no)
 				self.db_set("email_id", self.email_id)
+
+	def link_additional_contact(self):
+		if self.flags.is_new_doc and self.get("additional_contact_id"):
+			linked_doc = frappe.get_doc("Contact", self.get("additional_contact_id"))
+			linked_doc.append("links", dict(link_doctype="Customer", link_name=self.name))
+			linked_doc.save(ignore_permissions=self.flags.ignore_permissions)
 
 	def create_primary_address(self):
 		from frappe.contacts.doctype.address.address import get_address_display

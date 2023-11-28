@@ -12,7 +12,14 @@ frappe.ui.form.CustomerQuickEntryForm = class CustomerQuickEntryForm extends fra
 	}
 
 	get_variant_fields() {
-		var variant_fields = [{
+		var variant_fields = [
+		{
+			label: __("Additional Contact"),
+			fieldname: "additional_contact_id",
+			fieldtype: "Link",
+			options: "Contact"
+		},
+		{
 			fieldtype: "Section Break",
 			label: __("Primary Contact Details"),
 			collapsible: 1
