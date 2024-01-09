@@ -49,6 +49,8 @@ from erpnext.stock.doctype.serial_no.serial_no import (
 	update_serial_nos_after_submit,
 )
 
+from freezegun import freeze_time
+
 form_grid_templates = {"items": "templates/form_grid/item_grid.html"}
 
 
@@ -71,6 +73,10 @@ class SalesInvoice(SellingController):
 				"overflow_type": "billing",
 			}
 		]
+
+	def insert(self, *args, **kwargs):
+		with freeze_time(self.posting_date):
+			return super().insert(*args, **kwargs)
 
 	def set_indicator(self):
 		"""Set indicator for portal"""
