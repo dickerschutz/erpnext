@@ -511,7 +511,7 @@
    "link_fieldname": "party"
   }
  ],
- "modified": "2022-04-16 20:32:34.000304",
+ "modified": "2024-08-20 12:24:44.724982",
  "modified_by": "Administrator",
  "module": "Selling",
  "name": "Customer",
@@ -591,7 +591,7 @@
   }
  ],
  "quick_entry": 1,
- "search_fields": "customer_name,customer_group,territory, mobile_no,primary_address",
+ "search_fields": "customer_name,customer_group,territory,primary_address",
  "show_name_in_global_search": 1,
  "sort_field": "modified",
  "sort_order": "ASC",
